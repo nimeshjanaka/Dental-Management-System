@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+    // OOP Concept: Encapsulation
 class User
 {
     public static function isLoggedIn()
@@ -15,9 +15,10 @@ class User
         exit();
     }
 }
-
+// Dashboard class for rendering the dashboard
 class Dashboard
 {
+    // OOP Concept: Abstraction - Public method to render the dashboard
     public function render()
     {
         $this->checkLogin();
@@ -31,7 +32,7 @@ class Dashboard
         echo '<button type="submit" name="logout">Logout</button>';
         echo '</form>';
     }
-
+// OOP Concept: Encapsulation - Private method to check login status
     private function checkLogin()
     {
         if (!User::isLoggedIn()) {
@@ -40,10 +41,11 @@ class Dashboard
         }
     }
 }
-
+// Create an instance of the Dashboard class
 $dashboard = new Dashboard();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
+    // OOP Concept: Polymorphism - Call the static logout method of the User class
     User::logout();
 }
 ?>

@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['search_appointment_id'
 }
 
 // Fetch appointments based on date filter and/or Appointment ID search
-// Fetch appointments based on date filter and/or Appointment ID search
+
 $query = "SELECT * FROM Appointments";
 
 // Check if filter conditions are provided

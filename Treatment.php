@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to the login page
     exit();
@@ -10,11 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 // Include navbar
 include 'navbar.php';
 
-
+// Class for managing database connections (Encapsulation)
 class DatabaseConnection
 {
     private $conn;
 
+    // Constructor to establish the database connection
     public function __construct($hostname, $username, $password, $dbname)
     {
         $this->conn = new mysqli($hostname, $username, $password, $dbname);
@@ -22,20 +22,20 @@ class DatabaseConnection
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
         }
-
-        echo "Connected successfully";
     }
 
+    // Method to get the database connection object (Encapsulation)
     public function getConnection()
     {
         return $this->conn;
     }
 
-    public function closeConnection()
+    // Method to close the database connection (Encapsulation)
+    public function close()
     {
         if ($this->conn) {
             $this->conn->close();
-            echo "Connection closed";
+            
         } else {
             echo "Connection not available";
         }
@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-
+// Function to get the cost based on the procedure name (Abstraction)
 function getCost($procedure_name)
 {
     switch ($procedure_name) {

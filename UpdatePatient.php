@@ -65,7 +65,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the patient ID is provided in the URL
+
 if (isset($_GET['patient_id'])) {
     $patient_id = $_GET['patient_id'];
 

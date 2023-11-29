@@ -1,14 +1,72 @@
-
 <?php
 session_start();
 
-// Check if the user is not logged in
+// DatabaseConnection class encapsulates database-related functionality
+class DatabaseConnection
+{
+    private $conn;
+
+    // Constructor establishes the database connection
+    public function __construct($hostname, $username, $password, $dbname)
+    {
+        $this->conn = new mysqli($hostname, $username, $password, $dbname);
+
+        if ($this->conn->connect_error) {
+            die("Connection failed: " . $this->conn->connect_error);
+        }
+    }
+
+    // Getter method to obtain the database connection
+    public function getConnection()
+    {
+        return $this->conn;
+    }
+
+    // Method to close the database connection
+    public function closeConnection()
+    {
+        if ($this->conn) {
+            $this->conn->close();
+        }
+    }
+}
+
+// AppointmentDeleter class encapsulates appointment deletion logic
+class AppointmentDeleter
+{
+    private $conn;
+
+    // Constructor initializes the class with a database connection
+    public function __construct($conn)
+    {
+        $this->conn = $conn;
+    }
+
+    // Method to delete an appointment by ID
+    public function deleteAppointment($appointmentId)
+    {
+        
+        if (is_numeric($appointmentId)) {
+            $delete_query = "DELETE FROM Appointments WHERE appointment_id = $appointmentId";
+
+            // Perform the delete operation
+            if ($this->conn->query($delete_query) === TRUE) {
+                return true; // Deletion successful
+            } else {
+                return "Error deleting appointment: " . $this->conn->error;
+            }
+        } else {
+            return "Invalid appointment ID";
+        }
+    }
+}
+
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to the login page
     exit();
 }
-?>
-<?php
+
 include 'navbar.php';
 
 $hostname = "localhost";
@@ -17,34 +75,33 @@ $password = "";
 $dbname = "dental_management";
 
 // Create connection
-$conn = new mysqli($hostname, $username, $password, $dbname);
+$database = new DatabaseConnection($hostname, $username, $password, $dbname);
+$conn = $database->getConnection();
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Create AppointmentDeleter instance
+$appointmentDeleter = new AppointmentDeleter($conn);
 
-// Check if the appointment_id is set and a numeric value
-if (isset($_GET['appointment_id']) && is_numeric($_GET['appointment_id'])) {
-    // Get the appointment_id from the query parameters
-    $appointment_id = $_GET['appointment_id'];
+// Check if the appointment_id is set
+if (isset($_GET['appointment_id'])) {
+    $appointmentId = $_GET['appointment_id'];
 
-    // Perform the delete operation
-    $delete_query = "DELETE FROM Appointments WHERE appointment_id = $appointment_id";
+    // Perform the delete operation using the AppointmentDeleter class
+    $result = $appointmentDeleter->deleteAppointment($appointmentId);
 
-    if ($conn->query($delete_query) === TRUE) {
+    if ($result === true) {
         // Redirect back to the Appointments page after successful deletion
         header("Location: appointment.php");
         exit();
     } else {
-        echo "Error deleting appointment: " . $conn->error;
+        echo "Error: " . $result;
     }
 } else {
-    // Redirect to the Appointments page if appointment_id is not set or not a numeric value
+    // Redirect to the Appointments page if appointment_id is not set
     header("Location: appointment.php");
     exit();
 }
 
 // Close the connection
-$conn->close();
+$database->closeConnection();
 ?>
+

@@ -3,8 +3,9 @@ session_start();
 
 class DatabaseConnection
 {
-    private $conn;
+    private $conn;  // Encapsulation: Private property to encapsulate database connection
 
+        // Constructor to establish a database connection
     public function __construct($hostname, $username, $password, $dbname)
     {
         $this->conn = new mysqli($hostname, $username, $password, $dbname);
@@ -13,12 +14,13 @@ class DatabaseConnection
             die("Connection failed: " . $this->conn->connect_error);
         }
     }
-
+// Getter method to access the encapsulated database connection
     public function getConnection()
     {
-        return $this->conn;
+        return $this->conn; // Encapsulation: Private property to encapsulate database connection
     }
 
+    // Constructor to initialize with a database connection
     public function closeConnection()
     {
         if ($this->conn) {
@@ -26,7 +28,7 @@ class DatabaseConnection
         }
     }
 }
-
+// Class for managing payments (Abstraction)
 class Payments
 {
     private $conn;
@@ -35,7 +37,7 @@ class Payments
     {
         $this->conn = $conn;
     }
-
+// Method to generate payment invoice and perform related database operations
     public function generateInvoice($appointmentId, $paymentAmount, $otherExpenses)
     {
         // Initialize $appointment_cost

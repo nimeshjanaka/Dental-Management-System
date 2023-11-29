@@ -2,7 +2,7 @@
 <?php
 session_start();
 
-// Check if the user is not logged in
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to the login page
     exit();
@@ -37,18 +37,53 @@ if (!isset($_SESSION['user_id'])) {
        
         form {
            
-           justify-content: center;
            margin-top: 40px;
            background-color: rgba(255, 255, 255, 0.8); 
            border-radius: 10px;
            color: black;
            border: 2px solid #2FE41D;
-           height: 40vh;
+           height: auto;
            width: 50vh;
+           padding: 20px;
+           box-sizing: border-box;
            margin-left: 40%;
-           gap: 10px;
+           font-size: 20px;
+          }
+   
+          label {
+           display: block;
+           margin-top: 10px;
+           margin-left: 10px;
+       }
+   
+       input,
+       textarea {
+           width: calc(100% - 20px); 
+           padding: 8px;
+           box-sizing: border-box;
+           margin-top: 5px;
+           margin-left: 10px;
+       }
+   
+       input[type="date"] {
+           width: calc(100% - 20px); 
            
-           
+       }
+   
+       input[type="submit"] {
+           input[type="submit"] {
+           background-color: #4CAF50;
+           color: white;
+           padding: 10px 15px;
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+           margin-top: 10px; 
+           margin-left: 10px;
+       }
+   
+       input[type="submit"]:hover {
+           background-color: #45a049;
        }
 </style>
 
@@ -62,12 +97,12 @@ $dbname = "dental_management";
 // Create connection
 $conn = new mysqli($hostname, $username, $password, $dbname);
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the prescription ID is provided in the URL
+
 if (isset($_GET['prescription_id'])) {
     $prescription_id = $_GET['prescription_id'];
 
@@ -75,11 +110,11 @@ if (isset($_GET['prescription_id'])) {
     $query = "SELECT * FROM Prescription WHERE prescription_id = $prescription_id";
     $result = $conn->query($query);
 
-    // Check if the query was successful
+    
     if (!$result) {
         echo "Error: " . $conn->error;
     } else {
-        // Check if a prescription was found with the given ID
+        
         if ($result->num_rows > 0) {
             // Fetch the prescription data
             $prescription = $result->fetch_assoc();

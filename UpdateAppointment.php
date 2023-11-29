@@ -1,24 +1,25 @@
 <?php
 session_start();
-
+// DatabaseConnection class for encapsulating database connection
 class DatabaseConnection
 {
     private $conn;
-
+// Constructor to establish the database connection
     public function __construct($hostname, $username, $password, $dbname)
     {
+        // OOP Concept: Encapsulation - Private property to encapsulate database connection
         $this->conn = new mysqli($hostname, $username, $password, $dbname);
 
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
         }
     }
-
+// OOP Concept: Encapsulation - Getter method to obtain the database connection
     public function getConnection()
     {
         return $this->conn;
     }
-
+// OOP Concept: Encapsulation - Method to close the database connection
     public function closeConnection()
     {
         if ($this->conn) {
@@ -26,11 +27,11 @@ class DatabaseConnection
         }
     }
 }
-
+// Appointments class for managing appointment-related operations
 class Appointments
 {
     private $conn;
-
+// Constructor to initialize the class with a database connection
     public function __construct($conn)
     {
         $this->conn = $conn;
@@ -48,7 +49,7 @@ class Appointments
         }
     }
 }
-
+// Usage of DatabaseConnection to establish a connection
 $database = new DatabaseConnection("localhost", "root", "", "dental_management");
 $conn = $database->getConnection();
 
@@ -83,15 +84,47 @@ $appointmentsManager = new Appointments($conn);
     }
 
     form {
-        justify-content: center;
         margin-top: 40px;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(255, 255, 255, 0.8); 
         border-radius: 10px;
         color: black;
         border: 2px solid #2FE41D;
-        height: 45vh;
-        width: 40vh;
+        height: auto;
+        width: 50vh;
+        padding: 20px;
+        box-sizing: border-box;
         margin-left: 40%;
+        font-size: 20px;
+    }
+    input,
+    textarea {
+        width: calc(100% - 20px); 
+        padding: 8px;
+        box-sizing: border-box;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+
+    input[type="date"] {
+        width: calc(100% - 20px); 
+        
+    }
+
+    input[type="submit"] {
+        input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px; 
+        margin-left: 10px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+        
     }
 </style>
 

@@ -4,10 +4,12 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to the login page
     exit();
 }
+// OOP: Database Connection Class
 class DatabaseConnection
 {
     private $conn;
 
+    // OOP: Constructor for establishing the database connection
     public function __construct($hostname, $username, $password, $dbname)
     {
         $this->conn = new mysqli($hostname, $username, $password, $dbname);
@@ -33,16 +35,17 @@ class DatabaseConnection
         }
     }
 }
-
+// OOP: Patient Manager Class
 class PatientManager
 {
-    private $conn;
+    private $conn;  // Encapsulation: Private property to encapsulate database connection
 
+    // OOP: Constructor that takes a database connection as a parameter
     public function __construct($conn)
     {
         $this->conn = $conn;
     }
-
+    // OOP: Method for inserting patient data into the database
     public function insertPatient($first_name, $last_name, $date_of_birth, $contact_number, $email, $address)
     {
         $insert_query = "INSERT INTO Patients (first_name, last_name, date_of_birth, contact_number, email, address) VALUES ('$first_name', '$last_name', '$date_of_birth', '$contact_number', '$email', '$address')";
@@ -54,7 +57,7 @@ class PatientManager
             echo "Error: " . $insert_query . "<br>" . $this->conn->error;
         }
     }
-
+    // OOP: Method for fetching patients from the database
     public function getPatients()
     {
         $query = "SELECT * FROM Patients";
@@ -108,10 +111,11 @@ class PatientManager
         }
     }
 }
-
+// Creating a DatabaseConnection instance for database operations
 $database = new DatabaseConnection("localhost", "root", "", "dental_management");
 $conn = $database->getConnection();
 
+// Creating a PatientManager instance for patient-related operations
 $patientManager = new PatientManager($conn);
 ?>
 

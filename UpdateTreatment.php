@@ -37,18 +37,54 @@ if (!isset($_SESSION['user_id'])) {
        
         form {
            
-           justify-content: center;
-           margin-top: 40px;
-           background-color: rgba(255, 255, 255, 0.8); 
-           border-radius: 10px;
-           color: black;
-           border: 2px solid #2FE41D;
-           height: 45vh;
-           width: 40vh;
-           margin-left: 40%;
-           
-           
+        margin-top: 40px;
+        background-color: rgba(255, 255, 255, 0.8); 
+        border-radius: 10px;
+        color: black;
+        border: 2px solid #2FE41D;
+        height: auto;
+        width: 50vh;
+        padding: 20px;
+        box-sizing: border-box;
+        margin-left: 40%;
+        font-size: 20px;
        }
+
+       label {
+        display: block;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    input,
+    textarea {
+        width: calc(100% - 20px); 
+        padding: 8px;
+        box-sizing: border-box;
+        margin-top: 5px;
+        margin-left: 10px;
+    }
+
+    input[type="date"] {
+        width: calc(100% - 20px); 
+        
+    }
+
+    input[type="submit"] {
+        input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px; 
+        margin-left: 10px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
 </style>
 
 <?php
@@ -66,7 +102,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the treatment ID is provided in the URL
+
 if (isset($_GET['treatment_id'])) {
     $treatment_id = $_GET['treatment_id'];
 
@@ -74,7 +110,7 @@ if (isset($_GET['treatment_id'])) {
     $query = "SELECT * FROM Treatment WHERE treatment_id = $treatment_id";
     $result = $conn->query($query);
 
-    // Check if the query was successful
+    
     if (!$result) {
         echo "Error: " . $conn->error;
     } else {
@@ -85,14 +121,14 @@ if (isset($_GET['treatment_id'])) {
             
             
             echo "<form method='post' action='process_update_treatment.php'>";
-            echo "Patient ID: <input type='text' name='patient_id' value='{$treatment['patient_id']}'> <br>";
-            echo "Treatment Date: <input type='date' name='treatment_date' value='{$treatment['treatment_date']}' > <br>";
-            echo "Procedure Name: <input type='text' name='procedure_name' value='{$treatment['procedure_name']}' readonly> <br>";
-            echo "Cost: <input type='text' name='cost' value='{$treatment['cost']}' readonly> <br>";
-            echo "Notes: <textarea name='notes'>{$treatment['notes']}</textarea> <br>";
+            echo "Patient ID: <input type='text' name='patient_id' value='{$treatment['patient_id']}' style='margin-top: 10px;' > <br>";
+            echo "Treatment Date: <input type='date' name='treatment_date' value='{$treatment['treatment_date']}> <br>"; 
+            echo "Procedure Name: <input type='text' name='procedure_name' value='{$treatment['procedure_name']}' readonly > <br>";
+            echo "Cost: <input type='text' name='cost' value='{$treatment['cost']}' readonly > <br>";
+            echo "Notes: <textarea name='notes'>{$treatment['notes']}</textarea > <br>";
             
-            echo "<input type='hidden' name='treatment_id' value='{$treatment_id}'>";
-            echo "<input type='submit' name='submit' value='Update'>";
+            echo "<input type='hidden' name='treatment_id' value='{$treatment_id}' >";
+            echo "<input type='submit' name='submit' value='Update' >";
             echo "</form>";
         } else {
             echo "No treatment found with the given ID.";

@@ -4,7 +4,7 @@ session_start();
 class DatabaseConnection
 {
     private $conn;
-
+    // Constructor to establish the database connection
     public function __construct($hostname, $username, $password, $dbname)
     {
         $this->conn = new mysqli($hostname, $username, $password, $dbname);
@@ -13,14 +13,16 @@ class DatabaseConnection
             die("Connection failed: " . $this->conn->connect_error);
         }
 
+         // OOP Concept: Abstraction - No specific operation in the constructor
         echo "";
     }
-
+    //OOP Concept: Abstraction - Getter method to obtain the database connection
     public function getConnection()
     {
         return $this->conn;
     }
 
+        // OOP Concept: Abstraction - Method to close the database connection
     public function closeConnection()
     {
         if ($this->conn) {
@@ -32,15 +34,16 @@ class DatabaseConnection
     }
 }
 
+// OOP Concept: Encapsulation, Abstraction
 class Appointments
 {
     private $conn;
-
+    // Constructor to initialize the class with a database connection
     public function __construct($conn)
     {
         $this->conn = $conn;
     }
-
+    // // OOP Concept: Abstraction -Method to retrieve a list of patients from the database
     public function getPatients()
     {
         $patients_query = "SELECT patient_id, CONCAT(first_name, ' ', last_name) AS patient_name FROM Patients";
@@ -70,6 +73,7 @@ class Appointments
         return $result;
     }
 
+        // OOP Concept: Abstraction -
     public function displayAppointmentsTable()
     {
         $result = $this->getAppointments();

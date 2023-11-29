@@ -11,22 +11,43 @@ if (!isset($_SESSION['user_id'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Generation</title>
+<head >
+    <div class="head">
+    <h1 class="h3">Dental Management System</h1>
+    </div>
+</head>
     <style>
+        
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            margin: 0;
+            padding: 0;
+            background: url('https://img.freepik.com/free-vector/dentist-medical-background-with-3d-tooth-design_1017-26095.jpg?size=626&ext=jpg&ga=GA1.1.1880011253.1700265600&semt=ais') center/cover no-repeat fixed;
+            background-color: #3498db;
+            height: 100vh; 
+        
+
+        }
+        .head {
+            background-color: gray;
+            height: 100px;
+        }
+        .h3 {
+            text-align: center;
+            
         }
 
         .invoice-container {
             max-width: 600px;
             margin: 0 auto;
-            border: 1px solid #ccc;
+            border: 3px solid #bbb;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            margin-top: 60px;
+            background-color: rgba(255,255,235, 0.8);
+            
+            
         }
 
         .invoice-header {
@@ -63,12 +84,28 @@ if (!isset($_SESSION['user_id'])) {
         .invoice-total {
             margin-top: 20px;
             text-align: right;
+            text: bold;
+            font-weight: bold;
+            font-size: 18px;
+            text-decoration: underline;
+            
+        }
+        .h1{
+            color: #AD0274;
+            font-weight: bold;
+        }
+        p{
+            color: #AD0274;
+            font: italic;
+            font-size: 13px;
+            margin-left: 35%;
         }
     </style>
-</head>
+
 <body>
 <div class="invoice-container">
         <div class="invoice-header">
+            <h1 class="h1">Tooth Care Dental</h1>
             <h2>Invoice</h2>
         </div>
 
@@ -77,9 +114,9 @@ if (!isset($_SESSION['user_id'])) {
         $treatment_id = isset($_GET['treatment_id']) ? $_GET['treatment_id'] : '';
 
         // Initialize variables
-        $appointment_cost = 1000;  // Replace with the actual appointment cost
-        $payment_amount = 0;       // Replace with the actual payment amount
-        $other_expenses = 0;       // Replace with the actual other expenses
+        $appointment_cost = 1000;  
+        $payment_amount = 0;       
+        $other_expenses = 0;       
 
         // Fetch treatment data for the invoice
         $hostname = "localhost";
@@ -107,7 +144,7 @@ if (!isset($_SESSION['user_id'])) {
             echo "</div>";
 
             // Display invoice items
-            echo "<div class='invoice-items'>";
+            echo "<div class='invoice-items'>"; 
             echo "<table>";
             echo "<thead><tr><th>Description</th><th>Amount</th></tr></thead>";
             echo "<tbody>";
@@ -129,6 +166,7 @@ if (!isset($_SESSION['user_id'])) {
         // Close the connection
         $conn->close();
         ?>
+        <p class="p">Thank you come again!</p>
     </div>
 </body>
 </html>

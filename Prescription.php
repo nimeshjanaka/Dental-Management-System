@@ -1,10 +1,12 @@
 <?php
 session_start();
 
+// Class for managing database connections (Encapsulation)
 class DatabaseConnection
 {
     private $conn;
 
+    // Constructor to establish a database connection
     public function __construct($hostname, $username, $password, $dbname)
     {
         $this->conn = new mysqli($hostname, $username, $password, $dbname);
@@ -12,15 +14,15 @@ class DatabaseConnection
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
         }
-
-        
     }
 
+    // Getter method to access the encapsulated database connection
     public function getConnection()
     {
         return $this->conn;
     }
 
+    // Destructor or additional method for closing the database connection
     public function closeConnection()
     {
         if ($this->conn) {
@@ -32,6 +34,7 @@ class DatabaseConnection
     }
 }
 
+// Class for managing prescriptions (Abstraction)
 class Prescriptions
 {
     private $conn;
@@ -41,6 +44,7 @@ class Prescriptions
         $this->conn = $conn;
     }
 
+    // Method to get a list of patients (Abstraction)
     public function getPatients()
     {
         $patients_query = "SELECT patient_id, CONCAT(first_name, ' ', last_name) AS patient_name FROM Patients";
@@ -49,13 +53,14 @@ class Prescriptions
         return $patients_result;
     }
 
+    // Method to insert a new prescription (Abstraction)
     public function insertPrescription($patient_id, $prescription_date, $medication_name, $dosage, $instructions)
     {
         $insert_query = "INSERT INTO Prescription (patient_id, prescription_date, medication_name, dosage, instructions) VALUES ('$patient_id', '$prescription_date', '$medication_name', '$dosage', '$instructions')";
 
         if ($this->conn->query($insert_query) === TRUE) {
             // Use header to redirect after successful submission
-            header("Location: {$_SERVER['REQUEST_URI']}");
+            header("Location: {$_SERVER['PHP_SELF']}");
             exit();
         } else {
             echo "Error: " . $insert_query . "<br>" . $this->conn->error;
@@ -121,6 +126,17 @@ $conn = $database->getConnection();
 
 $prescriptionsManager = new Prescriptions($conn);
 $patients_result = $prescriptionsManager->getPatients();
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $patient_id = isset($_POST["patient_id"]) ? $_POST["patient_id"] : "";
+    $prescription_date = isset($_POST["prescription_date"]) ? $_POST["prescription_date"] : "";
+    $medication_name = isset($_POST["medication_name"]) ? $_POST["medication_name"] : "";
+    $dosage = isset($_POST["dosage"]) ? $_POST["dosage"] : "";
+    $instructions = isset($_POST["instructions"]) ? $_POST["instructions"] : "";
+
+    $prescriptionsManager->insertPrescription($patient_id, $prescription_date, $medication_name, $dosage, $instructions);
+}
 ?>
 
 <!DOCTYPE html>
@@ -152,7 +168,12 @@ $patients_result = $prescriptionsManager->getPatients();
         border: 2px solid #2FE41D;
         border-radius: 10px;
         color: black;
-        height: 65vh;
+        height: auto;
+        width: 65vh;
+        margin-left: 35%;
+        padding: 20px;
+        box-sizing: border-box;
+        
     }
 
     table {
@@ -172,7 +193,7 @@ $patients_result = $prescriptionsManager->getPatients();
     <?php include 'navbar.php'; ?>
     <h2>Prescription Form</h2>
 
-    <form method="post" action="Prescription.php">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <label for="patient_id">Select Patient:</label>
         <select name="patient_id" required>
             <?php
